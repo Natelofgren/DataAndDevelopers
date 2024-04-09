@@ -17,8 +17,5 @@ int main() {
         std::cout << codeinput; // pipe stream's content to standard output
     }
 
-    int x = 1;
-    std::cout << "Hello, World!" << std::endl;
-    printf("Hello \t, %d %d World \n", x,x);
     return 0;
 }
