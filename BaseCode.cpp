@@ -4,11 +4,19 @@
 // I'm here, too!!
 #include <iostream>
 #include <string>
+#include <fstream>
 
 int main() {
-    string codeinput = "";
-    std::cout << "Type your adventure (code)"; // Type a line of code and press enter
-    std::cin >> codeinput;  // Get user input from the keyboard
+    std::ifstream myfile ("MainDungeon.dandd");
+
+
+    std::string codeinput = "";
+
+    if ( myfile.is_open() ) { // always check whether the file is open
+        myfile >> codeinput; // pipe file's content into stream
+        std::cout << codeinput; // pipe stream's content to standard output
+    }
+
     int x = 1;
     std::cout << "Hello, World!" << std::endl;
     printf("Hello \t, %d %d World \n", x,x);
