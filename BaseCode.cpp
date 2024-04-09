@@ -13,9 +13,14 @@ int main() {
     std::string codeinput = "";
 
     if ( myfile.is_open() ) { // always check whether the file is open
-        myfile >> codeinput; // pipe file's content into stream
-        std::cout << codeinput; // pipe stream's content to standard output
+        while ( myfile ) { // loops until the end of the line
+            myfile >> codeinput; // pipe file's content into stream
+            if (codeinput == "_^") {
+                std::cout << "Comment (so ignore)";
+            }
+            else {  std::cout << codeinput; // pipe stream's content to standard output
+            }
+        }
     }
-
     return 0;
 }
