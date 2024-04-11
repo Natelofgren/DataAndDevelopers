@@ -42,9 +42,7 @@ int main() {
                 std::cout << "Comment (so ignore)" ;
             }
             else if (codeinput.find("roll") == 0) { // If roll is the first part of the line
-                std::cout << codeinput << "\n";
                 codeinput.erase(0,5); //removes roll (we already read it)
-                std::cout << until_space(codeinput) << "\n";
                 create_function_or_class(until_space(codeinput));
             }
             else {  std::cout << codeinput; // << countingthelines; // pipe stream's content to standard output
