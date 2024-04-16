@@ -6,8 +6,16 @@
 #include <string>
 #include <fstream>
 
-//The code below is helpful function that isn't actually running stuff based of the code
-// the function below takes a string and sends back the string until the first space
+enum token
+{
+    IDENTIFIER = 1,
+    OPERATOR = 2,
+    EOC = 3,
+    EQUALS = 4,
+    NUMBER = 5
+};
+
+// tstd::stringhe function below takes a string and sends back the string until the first space
 std::string until_space(std::string const& s)
 {
     std::string::size_type pos = s.find(' ');
@@ -20,17 +28,33 @@ std::string until_space(std::string const& s)
         return s;
     }
 }
-// Functions below are for running the virtual code
-void create_function_or_class(std::string value) { // This is used for rolling initiative or for creating a class
-    if (value == "initative") {
-        std::cout << "Yall need to roll initative";
+
+
+void tokenizer(std::string line){   //This is where everything is converted to tokens
+    if (until_space(line) == "roll"){
+        std::cout << line + "\n" ;
     }
-    if (value == "class") {
-        std::cout << "Yall need to make a class";
+    else if (until_space(line) == "nat") {
+
+    }
+    else if (until_space(line) == "dungeon") {
+
+    }
+    else if (until_space(line) == "say") {
+
+    }
+    else if (until_space(line) == "quest") {
+
+    }
+    else if (until_space(line) == "railroad") {
+
+    }
+    else {
+
     }
 }
-int main() {
 
+void lexer() { // This is the first step where we get the input from the file
     std::ifstream myfile ("MainDungeon.dandd");
     std::string codeinput = "";
     int countingthelines = 0;
@@ -39,15 +63,19 @@ int main() {
             std::getline(myfile, codeinput); // Grabs a full line of the file
             countingthelines++;
             if (codeinput == "_^") {
-                std::cout << "Comment (so ignore)" ;
             }
-            else if (codeinput.find("roll") == 0) { // If roll is the first part of the line
-                codeinput.erase(0,5); //removes roll (we already read it)
-                create_function_or_class(until_space(codeinput));
-            }
-            else {  std::cout << codeinput; // << countingthelines; // pipe stream's content to standard output
+            else  { // Sends the line to tokenizer to be tokenized!
+                tokenizer(codeinput);
             }
         }
+
     }
+}
+
+void parser() { // This is the first step where we get the input from the file
+}
+
+int main() {
+    lexer();
     return 0;
 }
