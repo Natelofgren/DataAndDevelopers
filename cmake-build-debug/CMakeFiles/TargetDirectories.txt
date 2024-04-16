@@ -1,3 +1,2 @@
-C:/Users/nate/OneDrive/Documents/GitHub/DataAndDevelopers/cmake-build-debug/CMakeFiles/DataAndDevelopers.dir
 C:/Users/nate/OneDrive/Documents/GitHub/DataAndDevelopers/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/nate/OneDrive/Documents/GitHub/DataAndDevelopers/cmake-build-debug/CMakeFiles/rebuild_cache.dir
