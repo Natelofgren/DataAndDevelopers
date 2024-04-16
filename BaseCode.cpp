@@ -32,7 +32,6 @@ std::string until_space(std::string const& s)
 
 void tokenizer(std::string line){   //This is where everything is converted to tokens
     if (until_space(line) == "roll"){
-        std::cout << line + "\n" ;
     }
     else if (until_space(line) == "nat") {
 
