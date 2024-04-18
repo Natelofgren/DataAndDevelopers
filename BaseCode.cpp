@@ -34,8 +34,7 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
     std::string tokenpiece = "starting the loop";
     while  (code.length() > 0) {
         tokenpiece = until_char(code, ' ');
-        code.erase(0, tokenpiece.length());
-        std::cout << tokenpiece;
+        code.erase(0, 1);
         if (tokenpiece == "roll") {
             token returntoken;
             returntoken.IDENTIFIER = "MAIN";
