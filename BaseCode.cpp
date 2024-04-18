@@ -90,6 +90,7 @@ void lexer() { // This is the first step where we get the input from the file
         while ( myfile ) { // loops until the end of the line
             std::getline(myfile, codeinput); // Grabs a full line of the file
             if (codeinput == "_^"){
+                // Ignore the comment
             }
             else  { // Sends the line to tokenizer to be tokenized and save the result in the list called tokens
                 tokenlist[countingthelines] = (tokenizer(codeinput));
