@@ -14,7 +14,7 @@ say *Woo*?
 railroad //
 say *no woo*?
 \\
-i – 1?
+reroll i – 1?
 ><
 
 nat kobold j 5?
@@ -25,7 +25,7 @@ say *smol*?
 railroad //
 say *beeg*?
 \\
-j – 1?
+reroll j – 1?
 ><
 ><
 
