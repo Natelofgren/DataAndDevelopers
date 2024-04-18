@@ -5,11 +5,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-// #include <vector>
+#include <vector>
 
 class token {       // The class token
 public:             // Access specifier
-    std::string IDENTIFIER = "IDENTIFIER"; //Main type of statment the token is
+    std::string IDENTIFIER = "IDENTIFIER"; //Main type of statment the token is (example Roll is identifier and so is nat)
     std::string OPERATOR = "OPERATOR";
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
     std::string EQUALS = "EQUALS";
@@ -29,64 +29,65 @@ std::string until_char(std::string const& s, char thing)
     }
 }
 
-token tokenizer(std::string line){   //This is where everything is converted to tokens
-    token returntoken;
-    if (until_char(line, ' ' ) == "roll"){
-        returntoken.IDENTIFIER = "MAIN";
-        line = line.erase(0, 5);
-        if (until_char(line, ' ') == "initiative") {
+std::vector<token> tokenizer(std::string code){   //This is where everything is converted to tokens
+    std::vector<token> tokenlist;
+    std::string tokenpiece = "starting the loop";
+    while  (code.length() > 0) {
+        tokenpiece = until_char(code, ' ');
+        code.erase(0, tokenpiece.length());
+        std::cout << tokenpiece;
+        if (tokenpiece == "roll") {
+            token returntoken;
+            returntoken.IDENTIFIER = "MAIN";
+            tokenlist.push_back(returntoken);
+
+        } else if (tokenpiece == "initiative") {
+            token returntoken;
             returntoken.OPERATOR = "START";
-            line = line.erase(0, 11);
-            returntoken.EOC =  line;
-        }
-    }
-    else if (until_char(line, ' ') == "nat") {
-        returntoken.IDENTIFIER = "VARIABLE";
-        line = line.erase(0, 4);
-        if (until_char(line, ' ') == "kobold") {
+            tokenlist.push_back(returntoken);
+
+        } else if (tokenpiece == "nat") {
+            token returntoken;
+            returntoken.IDENTIFIER = "VARIABLE";
+            tokenlist.push_back(returntoken);
+
+        } else if (tokenpiece == "kobold") {
+            token returntoken;
             returntoken.OPERATOR = "INTEGER";
-            line = line.erase(0, 7);
-            returntoken.VALUE = until_char(line, ' ');
-            line = line.erase(0, line.find(' '));
-            returntoken.EQUALS = until_char(line, line.back());
-            returntoken.EOC = line.back();
+            tokenlist.push_back(returntoken);
+
         }
-        if (until_char(line, ' ') == "dragon") {
+        else if (tokenpiece == "dragon") {
+            token returntoken;
             returntoken.OPERATOR = "STRING";
-            line = line.erase(0, 7);
-            returntoken.VALUE = until_char(line, ' ');
-            line = line.erase(0, (line.find(' ') + 1));
-            returntoken.EQUALS = until_char(line, '*');
-            returntoken.EOC = line.back();
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "say") {
+            token returntoken;
+            returntoken.IDENTIFIER = "PRINT";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece[0] == '*') {
+            tokenpiece = tokenpiece.erase(0,1);
+            token returntoken;
+            returntoken.VALUE = until_char(tokenpiece, '*' );
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "quest") {
+
+        } else if (tokenpiece == "railroad") {
+
+        } else {
         }
     }
-
-    else if (until_char(line, ' ' ) == "say") {
-        returntoken.IDENTIFIER = "PRINT";
-        line = line.erase(0, 5);
-        returntoken.VALUE = until_char(line, '*');
-        returntoken.EOC = line.back();
-    }
-    else if (until_char(line, ' ') == "quest") {
-
-    }
-    else if (until_char(line, ' ') == "railroad") {
-
-    }
-    else {
-    }
-    return returntoken;
+    return tokenlist;
 }
 
 void parser(token tokenlist[] ) { // This is the final step where we turn the tokens in order
-    std::cout << (tokenlist[5].EOC);
 }
 
-void lexer() { // This is the first step where we get the input from the file
+std::string lexer() { // This is the first step where we get the input from the file
     std::ifstream myfile ("MainDungeon.dandd");
     std::string codeinput = "";
+    std::string finalstring ="";
     int countingthelines = 0;
-    token tokenlist[255];
     if ( myfile.is_open() ) { // always check whether the file is open
         while ( myfile ) { // loops until the end of the line
             std::getline(myfile, codeinput); // Grabs a full line of the file
@@ -94,20 +95,19 @@ void lexer() { // This is the first step where we get the input from the file
                 // Ignore the comment
             }
             else  { // Sends the line to tokenizer to be tokenized and save the result in the list called tokens
-                tokenlist[countingthelines] = (tokenizer(codeinput));
-                countingthelines++;
+                finalstring.append(codeinput + " ");
             }
         }
 
     }
-    parser(tokenlist);
-
+    return finalstring;
 
 
 }
 
 
 int main() {
-    lexer();
+    std::vector<token> tokenlist = tokenizer(lexer());
+    std::cout << tokenlist[0].IDENTIFIER;
     return 0;
 }
