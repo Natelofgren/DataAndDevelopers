@@ -1,31 +1,31 @@
 roll initiative <>
-nat kobold Gary 5?
-nat dragon Bob *Hello World*?
+nat kobold Gary 5 ?
+nat dragon Bob *Hello World* ?
 
 dungeon 3 floors <>
-say Bob?
+say Bob ?
 ><
 
-nat kobold i 4?
+nat kobold i 4 ?
 dungeon i floors <>
 quest i is 3 //
-say *Woo*?
+say *Woo* ?
 \\
 railroad //
-say *no woo*?
+say *no woo* ?
 \\
-i – 1?
+reroll i – 1 ?
 ><
 
-nat kobold j 5?
+nat kobold j 5 ?
 dungeon j floors <>
 quest j CD 2 //
-say *smol*?
+say *smol* ?
 \\
 railroad //
-say *beeg*?
+say *beeg* ?
 \\
-j – 1?
+reroll j – 1 ?
 ><
 ><
 
