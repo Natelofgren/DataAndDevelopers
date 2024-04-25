@@ -5,20 +5,20 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 class token {       // The class token
 public:             // Access specifier
-    std::string IDENTIFIER = "IDENTIFIER";
+    std::string IDENTIFIER = "IDENTIFIER"; //Main type of statment the token is (example Roll is identifier and so is nat)
     std::string OPERATOR = "OPERATOR";
-    std::string EOC = "ENDOFCOMMAND";
+    std::string EOC = "ENDOFCOMMAND"; //The last part of the line
     std::string EQUALS = "EQUALS";
-    std::string VALUE = "VALUE";  // Attribute (string variable)
+    std::string VALUE = "VALUE";  // Information the user inputs
 };
-
 // tstd::stringhe function below takes a string and sends back the string until the first space
-std::string until_space(std::string const& s)
+std::string until_char(std::string const& s, char thing)
 {
-    std::string::size_type pos = s.find(' ');
+    std::string::size_type pos = s.find(thing);
     if (pos != std::string::npos)
     {
         return s.substr(0, pos);
@@ -29,72 +29,147 @@ std::string until_space(std::string const& s)
     }
 }
 
-std::string until_astrix(std::string const& s) {
-    std::string::size_type pos = s.find('*');
-    if (pos != std::string::npos) {
-        return s.substr(0, pos);
-    }
-    else {
-        return s;
-    }
-}
-token tokenizer(std::string line){   //This is where everything is converted to tokens
-    token returntoken;
+std::vector<token> tokenizer(std::string code){   //This is where everything is converted to tokens
+    std::vector<token> tokenlist;
+    std::string tokenpiece = "starting the loop";
+    while  (code.length() > 0) {
+        tokenpiece = until_char(code, ' ');
+        code.erase(0, 1);
+        if (tokenpiece == "roll") {
+            token returntoken;
+            returntoken.IDENTIFIER = "MAIN";
+            tokenlist.push_back(returntoken);
 
-    if (until_space(line) == "roll"){
-    }
-    else if (until_space(line) == "nat") {
+        } else if (tokenpiece == "initiative") {
+            token returntoken;
+            returntoken.OPERATOR = "START";
+            tokenlist.push_back(returntoken);
 
+        } else if (tokenpiece == "nat") {
+            token returntoken;
+            returntoken.IDENTIFIER = "VARIABLE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "kobold") {
+            token returntoken;
+            returntoken.OPERATOR = "INTEGER";
+            tokenlist.push_back(returntoken);
+        }
+        else if (tokenpiece == "dragon") {
+            token returntoken;
+            returntoken.OPERATOR = "STRING";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "goblin") {
+                token returntoken;
+                returntoken.OPERATOR = "BOOLEAN";
+                tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "say") {
+            token returntoken;
+            returntoken.IDENTIFIER = "PRINT";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece[0] == '*') {
+            tokenpiece = tokenpiece.erase(0,1);
+            token returntoken;
+            returntoken.VALUE = until_char(tokenpiece, '*' );
+            tokenlist.push_back(returntoken);
+        } else if (isdigit(tokenpiece[0])) {
+            token returntoken;
+            returntoken.VALUE = tokenpiece;
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "chest") {
+            token returntoken;
+            returntoken.VALUE = "TRUE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "mimic") {
+            token returntoken;
+            returntoken.VALUE = "FALSE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "?") {
+            token returntoken;
+            returntoken.EOC = "END";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "<>") {
+            token returntoken;
+            returntoken.EOC = "OPENBRACKET";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "><") {
+            token returntoken;
+            returntoken.EOC = "CLOSEDBRACKET";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "//") {
+            token returntoken;
+            returntoken.EOC = "OPENIF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "\\\\") {
+            token returntoken;
+            returntoken.EOC = "CLOSEDIF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "&") {
+            token returntoken;
+            returntoken.OPERATOR = "PLUS";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "–") {
+            token returntoken;
+            returntoken.OPERATOR = "MINUS";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "·") {
+            token returntoken;
+            returntoken.OPERATOR = "MULTIPLY";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "÷") {
+            token returntoken;
+            returntoken.OPERATOR = "DIVIDE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "is") {
+            token returntoken;
+            returntoken.OPERATOR = "IFEQUALS";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "quest") {
+            token returntoken;
+            returntoken.IDENTIFIER = "IF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "sidequest") {
+            token returntoken;
+            returntoken.IDENTIFIER = "IFELSE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "railroad") {
+            token returntoken;
+            returntoken.IDENTIFIER = "ELSE";
+            tokenlist.push_back(returntoken);
+        } else {
+            std::cout << "Error!!";
+        }
     }
-    else if (until_space(line) == "dungeon") {
-
-    }
-    else if (until_space(line) == "say") {
-        returntoken.IDENTIFIER = "say";
-        line = line.erase(0, 5);
-        returntoken.VALUE = until_astrix(line);
-        returntoken.EOC = line.back();
-    }
-    else if (until_space(line) == "quest") {
-
-    }
-    else if (until_space(line) == "railroad") {
-
-    }
-    else {
-    }
-    return returntoken;
+    return tokenlist;
 }
 
 void parser(token tokenlist[] ) { // This is the final step where we turn the tokens in order
-    std::cout << (tokenlist[0].EOC);
 }
 
-void lexer() { // This is the first step where we get the input from the file
+std::string lexer() { // This is the first step where we get the input from the file
     std::ifstream myfile ("MainDungeon.dandd");
     std::string codeinput = "";
+    std::string finalstring ="";
     int countingthelines = 0;
-    token tokenlist[255];
     if ( myfile.is_open() ) { // always check whether the file is open
         while ( myfile ) { // loops until the end of the line
             std::getline(myfile, codeinput); // Grabs a full line of the file
-            if (codeinput == "_^") {
+            if (codeinput == "_^"){
+                // Ignore the comment
             }
             else  { // Sends the line to tokenizer to be tokenized and save the result in the list called tokens
-                tokenlist[countingthelines] = (tokenizer(codeinput));
-                countingthelines++;
+                finalstring.append(codeinput + " ");
             }
         }
 
     }
-    parser(tokenlist);
-
+    return finalstring;
 
 
 }
 
 
 int main() {
-    lexer();
+    std::vector<token> tokenlist = tokenizer(lexer());
+    std::cout << tokenlist[0].IDENTIFIER;
     return 0;
 }
