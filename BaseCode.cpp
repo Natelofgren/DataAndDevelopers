@@ -49,17 +49,19 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             token returntoken;
             returntoken.IDENTIFIER = "VARIABLE";
             tokenlist.push_back(returntoken);
-
         } else if (tokenpiece == "kobold") {
             token returntoken;
             returntoken.OPERATOR = "INTEGER";
             tokenlist.push_back(returntoken);
-
         }
         else if (tokenpiece == "dragon") {
             token returntoken;
             returntoken.OPERATOR = "STRING";
             tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "goblin") {
+                token returntoken;
+                returntoken.OPERATOR = "BOOLEAN";
+                tokenlist.push_back(returntoken);
         } else if (tokenpiece == "say") {
             token returntoken;
             returntoken.IDENTIFIER = "PRINT";
@@ -69,11 +71,72 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             token returntoken;
             returntoken.VALUE = until_char(tokenpiece, '*' );
             tokenlist.push_back(returntoken);
+        } else if (isdigit(tokenpiece[0])) {
+            token returntoken;
+            returntoken.VALUE = tokenpiece;
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "chest") {
+            token returntoken;
+            returntoken.VALUE = "TRUE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "mimic") {
+            token returntoken;
+            returntoken.VALUE = "FALSE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "?") {
+            token returntoken;
+            returntoken.EOC = "END";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "<>") {
+            token returntoken;
+            returntoken.EOC = "OPENBRACKET";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "><") {
+            token returntoken;
+            returntoken.EOC = "CLOSEDBRACKET";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "//") {
+            token returntoken;
+            returntoken.EOC = "OPENIF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "\\\\") {
+            token returntoken;
+            returntoken.EOC = "CLOSEDIF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "&") {
+            token returntoken;
+            returntoken.OPERATOR = "PLUS";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "–") {
+            token returntoken;
+            returntoken.OPERATOR = "MINUS";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "·") {
+            token returntoken;
+            returntoken.OPERATOR = "MULTIPLY";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "÷") {
+            token returntoken;
+            returntoken.OPERATOR = "DIVIDE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "is") {
+            token returntoken;
+            returntoken.OPERATOR = "IFEQUALS";
+            tokenlist.push_back(returntoken);
         } else if (tokenpiece == "quest") {
-
+            token returntoken;
+            returntoken.IDENTIFIER = "IF";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "sidequest") {
+            token returntoken;
+            returntoken.IDENTIFIER = "IFELSE";
+            tokenlist.push_back(returntoken);
         } else if (tokenpiece == "railroad") {
-
+            token returntoken;
+            returntoken.IDENTIFIER = "ELSE";
+            tokenlist.push_back(returntoken);
         } else {
+            std::cout << "Error!!";
         }
     }
     return tokenlist;
