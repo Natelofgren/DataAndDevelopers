@@ -14,8 +14,9 @@ public:             // Access specifier
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
     std::string EQUALS = "EQUALS";
     std::string VALUE = "VALUE";  // Information the user inputs
+    bool ISLEFT = false;
 };
-// tstd::stringhe function below takes a string and sends back the string until the first space
+// the function below takes a string and sends back the string until the first space
 std::string until_char(std::string const& s, char thing)
 {
     std::string::size_type pos = s.find(thing);
@@ -142,8 +143,56 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
     return tokenlist;
 }
 
-void parser(token tokenlist[] ) { // This is the final step where we turn the tokens in order
+// This is the second to last step where we turn the tokens in order
+void makeleft (token giventoken){
+    if (giventoken.OPERATOR != "OPERATOR"){
+        giventoken.ISLEFT = true;
+    }
 }
+
+std::vector<token> parser(std::vector<token>  tokenlist) {
+
+    for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
+        if (tokenlist[i + 1].VALUE != "VALUE") {
+            tokenlist[i].ISLEFT = true;
+        }
+        if (tokenlist[i].OPERATOR != "OPERATOR"){
+            tokenlist[i].ISLEFT = true;
+            if (tokenlist[i + 1].VALUE != "VALUE"){
+                tokenlist[i].ISLEFT = false;
+            }
+        }
+        else {
+
+        }
+
+        return tokenlist;
+    }
+}
+void treeinator(){
+    for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
+        if (tokenlist[i + 1].VALUE != "VALUE") {
+            tokenlist[i].ISLEFT = true;
+        }
+        if (tokenlist[i].OPERATOR != "OPERATOR"){
+            tokenlist[i].ISLEFT = true;
+            if (tokenlist[i + 1].VALUE != "VALUE"){
+                tokenlist[i].ISLEFT = false;
+            }
+        }
+        else {
+
+        }
+
+        return tokenlist;
+    }
+
+
+
+
+}
+
+
 
 std::string lexer() { // This is the first step where we get the input from the file
     std::ifstream myfile ("MainDungeon.dandd");
@@ -163,13 +212,13 @@ std::string lexer() { // This is the first step where we get the input from the 
 
     }
     return finalstring;
-
-
 }
 
 
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
+    parser(tokenlist);
+    treeinator();
     std::cout << tokenlist[0].IDENTIFIER;
     return 0;
 }
