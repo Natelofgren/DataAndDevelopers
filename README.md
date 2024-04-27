@@ -57,6 +57,16 @@ smol
 - All lines end with the ? character  
 - Single line comments begin with \_^
 - Multi-line comments begin and end with ||
-- Blocks of code in an if-else statement begin with // and end with \\\. All other blocks of code begin with <> and end with \><  
+- Blocks of code in an if-else statement begin with // and end with \\\\. All other blocks of code begin with <> and end with \><  
 - Strings begin and end with the \* character  
-- Binary operators: & for addition, – for subtraction, · for multiplication, and ÷ for division. "is" is used for equality comparison (== in C++). "AC" is used for \>, "DC" is used for \>=, "CA" is used for <, and "CD" is used for <=.
+- Binary operators: & for addition, – for subtraction, · for multiplication, and ÷ for division. "is" is used for equality comparison (== in C++). "AC" is used for \>, "DC" is used for \>=, "CA" is used for <, and "CD" is used for <=.  
+
+### Variables  
+
+All lines involving the creation or manipulation of variables begin with the keyword "reroll." The keyword "nat" is used to define a new variable.  
+
+### Variable Types  
+
+goblin → bool  
+kobold → int  
+dragon → string  
