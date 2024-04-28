@@ -9,7 +9,7 @@ Data and Developers is a programming language based on Dungeons and Dragons. It 
 ### Demo Code
 
 ##### Code:
->roll initiative <>  
+`roll initiative <>  
 reroll nat kobold Gary 5?  
 reroll nat dragon Bob \*Hello World*?  
 dungeon 3 floors <>  
@@ -35,7 +35,7 @@ say \*beeg*?
 \\\  
 reroll j – 1?  
 \><  
-\><  
+\><`  
 
 ##### Output:
 Hello World  
