@@ -66,17 +66,18 @@ smol
 | railroad   | Else statement                   |
 | dungeon    | Define loop                      |
 | floors     | Number of times to run loop      |
-| say        | Print string to screen           |
+| say        | Print to screen                  |
 
 
 ### Syntax Rules  
 
-- All lines end with the ? character  
-- Single line comments begin with \_^
-- Multi-line comments begin and end with ||
-- Blocks of code in an if-else statement begin with // and end with \\\\. All other blocks of code begin with <> and end with \><  
-- Strings begin and end with the \* character   
-- All lines involving the creation or manipulation of variables begin with the keyword "reroll." The keyword "nat" is used to define a new variable.  
+- All lines end with the `?` character.  
+- Single line comments begin with `_^`.
+- Multi-line comments begin and end with `||`.
+- Blocks of code in a `quest` statement begin with `//` and end with `\\`. All other blocks of code begin with `<>` and end with `><`.  
+- Strings begin and end with the `*` character.  
+- All lines involving the creation or manipulation of variables begin with the keyword `reroll`. The keyword `nat` is used to define a new variable.
+- If a `dungeon` statement is passed a number in its header, it will loop a fixed number of times. If it is passed a variable with a numeric value, it will loop until the variable's value is as specified in the header.
 
 ### Binary Operators
 | DandD Binary Operator | C++ Binary Operator | Operation                |
@@ -105,6 +106,12 @@ smol
 
 `reroll nat [varType] [varName] [value] ?`  
 `reroll [varName] [mathOperator] [number] ?`  
-`say *[stringValue]* ?`
+`say *[stringValue]* ?`  
+`say [varName] ?`  
+`say [number] ?`  
+`dungeon [number] floors <>`  
+`dungeon [numericalVarName] floors <>`  
+`_^ [comment text]`  
+`|| [comment text] ||`
 
 ### Language State
