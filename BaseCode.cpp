@@ -14,7 +14,8 @@ public:             // Access specifier
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
     std::string EQUALS = "EQUALS";
     std::string VALUE = "VALUE";  // Information the user inputs
-    bool ISLEFT = false;
+    int RIGHT;
+    int LEFT;
 };
 // the function below takes a string and sends back the string until the first space
 std::string until_char(std::string const& s, char thing)
@@ -144,22 +145,16 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 }
 
 // This is the second to last step where we turn the tokens in order
-void makeleft (token giventoken){
-    if (giventoken.OPERATOR != "OPERATOR"){
-        giventoken.ISLEFT = true;
-    }
-}
 
 std::vector<token> parser(std::vector<token>  tokenlist) {
 
     for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (tokenlist[i + 1].VALUE != "VALUE") {
-            tokenlist[i].ISLEFT = true;
-        }
+    int lastoperator = 0;
         if (tokenlist[i].OPERATOR != "OPERATOR"){
-            tokenlist[i].ISLEFT = true;
-            if (tokenlist[i + 1].VALUE != "VALUE"){
-                tokenlist[i].ISLEFT = false;
+            tokenlist[i].LEFT = (lastoperator);
+            lastoperator = i;
+            if  (tokenlist[i+1].VALUE != "VALUE") {
+                tokenlist[i].RIGHT = i + 1;
             }
         }
         else {
@@ -169,28 +164,10 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
         return tokenlist;
     }
 }
-void treeinator(){
-    for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (tokenlist[i + 1].VALUE != "VALUE") {
-            tokenlist[i].ISLEFT = true;
-        }
-        if (tokenlist[i].OPERATOR != "OPERATOR"){
-            tokenlist[i].ISLEFT = true;
-            if (tokenlist[i + 1].VALUE != "VALUE"){
-                tokenlist[i].ISLEFT = false;
-            }
-        }
-        else {
-
-        }
-
+std::vector<token> treeinator(std::vector<token>  tokenlist){
         return tokenlist;
     }
 
-
-
-
-}
 
 
 
@@ -217,8 +194,7 @@ std::string lexer() { // This is the first step where we get the input from the 
 
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
-    parser(tokenlist);
-    treeinator();
+    treeinator(parser(tokenlist));
     std::cout << tokenlist[0].IDENTIFIER;
     return 0;
 }
