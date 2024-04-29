@@ -43,17 +43,17 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
         code = code.erase(0, remove);
         //std::cout <<code;
         //std::cout << "/\\";
-        if (tokenpiece == "roll") {
+        if (tokenpiece == "roll") { //tokenizes word for object or function
             token returntoken;
             returntoken.IDENTIFIER = "MAIN";
             tokenlist.push_back(returntoken);
 
-        } else if (tokenpiece == "initiative") {
+        } else if (tokenpiece == "initiative") { //tokenizes the word main function that starts the code
             token returntoken;
             returntoken.OPERATOR = "START";
             tokenlist.push_back(returntoken);
 
-        } else if (tokenpiece == "nat") {
+        } else if (tokenpiece == "nat") {//tokenizes the word for the start of a variable
             token returntoken;
             returntoken.IDENTIFIER = "VARIABLE";
             tokenlist.push_back(returntoken);
@@ -62,11 +62,11 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             returntoken.VARIABLE = "INTEGER";
             tokenlist.push_back(returntoken);
         }
-        else if (tokenpiece == "dragon") {
+        else if (tokenpiece == "dragon") {//tokenizes the word that defines a string
             token returntoken;
             returntoken.VARIABLE = "STRING";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "goblin") {
+        } else if (tokenpiece == "goblin") {//tokenizes the word that defines a 
                 token returntoken;
                 returntoken.VARIABLE = "BOOLEAN";
                 tokenlist.push_back(returntoken);

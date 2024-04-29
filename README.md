@@ -12,14 +12,14 @@ Data and Developers is a programming language based on Dungeons and Dragons. It 
 ```
 roll initiative <>
 
-    reroll nat kobold Gary 5 ?  
-    reroll nat dragon Bob *Hello World* ?
+    nat kobold Gary = 5 ?  
+    nat dragon Bob *Hello World* ?
 
     dungeon 3 floors <>  
         say Bob ?  
     ><
 
-    reroll nat kobold i 4 ?  
+    nat kobold i = 4 ?  
     dungeon i floors <>  
         quest i is 3 //  
             say *Woo* ?  
@@ -30,7 +30,7 @@ roll initiative <>
         reroll i – 1 ?  
     ><
 
-    reroll nat kobold j 5 ?  
+    nat kobold j = 5 ?  
     dungeon j floors <>  
         quest j CD 2 //  
             say *smol* ?  
