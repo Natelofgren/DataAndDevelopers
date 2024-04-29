@@ -104,7 +104,7 @@ smol
 
 ### Valid Grammars
 
-`reroll nat [varType] [varName] [value] ?`  
+`reroll nat [varName] [varType] [value] ?`  
 `reroll [varName] [mathOperator] [number] ?`  
 `say *[stringValue]* ?`  
 `say [varName] ?`  
