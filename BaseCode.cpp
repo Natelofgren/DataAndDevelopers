@@ -66,80 +66,80 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             token returntoken;
             returntoken.VARIABLE = "STRING";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "goblin") {//tokenizes the word that defines a 
+        } else if (tokenpiece == "goblin") {//tokenizes the word that defines a boolean
                 token returntoken;
                 returntoken.VARIABLE = "BOOLEAN";
                 tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "say") {
+        } else if (tokenpiece == "say") {//tokenizes the word that start the print function
             token returntoken;
             returntoken.IDENTIFIER = "PRINT";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece[0] == '*') {
+        } else if (tokenpiece[0] == '*') {//tokenizes symbol as quotation makes
             tokenpiece = tokenpiece.erase(0,1);
             token returntoken;
-            returntoken.VALUE = until_char(tokenpiece, '*' );
+            returntoken.VALUE = until_char(tokenpiece, '*' );//ends the statment
             tokenlist.push_back(returntoken);
         } else if (isdigit(tokenpiece[0])) {
             token returntoken;
             returntoken.VALUE = tokenpiece;
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "chest") {
+        } else if (tokenpiece == "chest") {//tokenizes the word for boolean value - True
             token returntoken;
             returntoken.VALUE = "TRUE";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "mimic") {
+        } else if (tokenpiece == "mimic") {//tokenizes the the word for the boolean value - False
             token returntoken;
             returntoken.VALUE = "FALSE";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "?") {
+        } else if (tokenpiece == "?") {//tokenizes the symbol to end a statement
             token returntoken;
             returntoken.EOC = "END";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "<>") {
+        } else if (tokenpiece == "<>") {//tokenizes symbol for brackets to start a fun, class, or if statment
             token returntoken;
             returntoken.EOC = "OPENBRACKET";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "><") {
+        } else if (tokenpiece == "><") {//tokenizes symbol for brackets to end a fun or class
             token returntoken;
             returntoken.EOC = "CLOSEDBRACKET";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "//") {
+        } else if (tokenpiece == "//") {// tokenizes the symbol to start a if statement
             token returntoken;
             returntoken.EOC = "OPENIF";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "\\\\") {
+        } else if (tokenpiece == "\\\\") {//tokenizes the symbol to end a if statement
             token returntoken;
             returntoken.EOC = "CLOSEDIF";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "&") {
+        } else if (tokenpiece == "&") {//tokenizes symbol to add
             token returntoken;
             returntoken.OPERATOR = "PLUS";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "–") {
+        } else if (tokenpiece == "–") {//tokenizees symbol to subtract
             token returntoken;
             returntoken.OPERATOR = "MINUS";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "·") {
+        } else if (tokenpiece == "·") {//tokenizes symbol to multiply
             token returntoken;
             returntoken.OPERATOR = "MULTIPLY";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "÷") {
+        } else if (tokenpiece == "÷") {//tokenizes symbol to divide
             token returntoken;
             returntoken.OPERATOR = "DIVIDE";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "is") {
+        } else if (tokenpiece == "is") {//tokenizes word for consitional in if statement
             token returntoken;
             returntoken.OPERATOR = "IFEQUALS";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "quest") {
+        } else if (tokenpiece == "quest") {//tokenizes word to start an if statement
             token returntoken;
             returntoken.IDENTIFIER = "IF";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "sidequest") {
+        } else if (tokenpiece == "sidequest") {//tokenizes word to for else if
             token returntoken;
             returntoken.IDENTIFIER = "IFELSE";
             tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "railroad") {
+        } else if (tokenpiece == "railroad") {//tokenize word for else
             token returntoken;
             returntoken.IDENTIFIER = "ELSE";
             tokenlist.push_back(returntoken);
@@ -156,30 +156,34 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
     bool firstvalue = 0;
 
     for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (firstvalue == 0 && tokenlist[i].VALUE != "VALUE" ){
+        if (firstvalue == 0 && tokenlist[i].VALUE != "VALUE" ){//places values into a tree
             tokenlist[i].LEFT = i;
             firstvalue = i;
             //std::cout << "assigned a left value ";
 
-        } else if (tokenlist[i].OPERATOR != "OPERATOR") {
-            if (lastoperator == 0){
+        } else if (tokenlist[i].OPERATOR != "OPERATOR") {//places operators into tree
+            if (lastoperator == 0){//places operator first in the tree if there is no other operators
                 lastoperator = firstvalue;
             }
             tokenlist[i].LEFT = (lastoperator);
             lastoperator = i;
             //std::cout << "assigned a left value ";
-            if (tokenlist[i + 1].VALUE != "VALUE") {
+            if (tokenlist[i + 1].VALUE != "VALUE") {//places the first value right of the operator
                 tokenlist[i].RIGHT = i + 1;
                 //std::cout << "assigned a right value ";
             }
         }
         for (int i = 0; i < tokenlist.size(); i++ ) { //loops
+<<<<<<< Updated upstream
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
                 if (lastoperator == 0){
                     lastoperator = firstvalue;
                 }
+=======
+            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
+>>>>>>> Stashed changes
                 tokenlist[i].LEFT = lastoperator;
-                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
+                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {//places the question mark(end) at the right most of the tree
                     tokenlist[i].RIGHT = tokenlist.size() - 1;
                 }
             }
@@ -187,6 +191,7 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
     }
     return tokenlist;
 }
+//puts the already parsed items into a very pretty tree that prints
 void treeinator(std::vector<token>  tokenlist) {
     std::string rightnumber = "";
     for (int i = tokenlist.size() - 1; i >= 0; i-- ){
@@ -269,7 +274,7 @@ void printidentifier(token  giventoken) {
     }
 
 }
-int domath(token operate, token left, token right){
+int domath(token operate, token left, token right){//Takes the numbers orantation to the operator in the tree and adds them together
     int returnnumber;
 
     int leftnumber =stoi(left.VALUE);
@@ -313,7 +318,7 @@ void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
 }
 
 
-int main() {
+int main() {//executes the functions
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
     treeinator(parser(tokenlist));
