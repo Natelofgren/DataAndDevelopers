@@ -14,8 +14,8 @@ public:             // Access specifier
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
     std::string EQUALS = "EQUALS";
     std::string VALUE = "VALUE";  // Information the user inputs
-    int RIGHT;
-    int LEFT;
+    int RIGHT = 123456;
+    int LEFT = 123456;
 };
 // the function below takes a string and sends back the string until the first space
 std::string until_char(std::string const& s, char thing)
@@ -36,7 +36,14 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
     std::string tokenpiece = "starting the loop";
     while  (code.length() > 0) {
         tokenpiece = until_char(code, ' ');
-        code.erase(0, 1);
+        int remove = tokenpiece.length() + 1;
+
+        if (remove == 0) {
+            remove = 1;
+        }
+        code = code.erase(0, remove);
+        //std::cout <<code;
+        //std::cout << "/\\";
         if (tokenpiece == "roll") {
             token returntoken;
             returntoken.IDENTIFIER = "MAIN";
@@ -138,7 +145,6 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             returntoken.IDENTIFIER = "ELSE";
             tokenlist.push_back(returntoken);
         } else {
-            std::cout << "Error!!";
         }
     }
     return tokenlist;
@@ -147,26 +153,60 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 // This is the second to last step where we turn the tokens in order
 
 std::vector<token> parser(std::vector<token>  tokenlist) {
+    int lastoperator = 0;
 
     for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-    int lastoperator = 0;
+        if (i == 0){
+            tokenlist[i].LEFT = 0;
+            std::cout << "assigned a left value ";
+        }
         if (tokenlist[i].OPERATOR != "OPERATOR"){
             tokenlist[i].LEFT = (lastoperator);
             lastoperator = i;
+            std::cout << "assigned a left value ";
             if  (tokenlist[i+1].VALUE != "VALUE") {
                 tokenlist[i].RIGHT = i + 1;
+                std::cout << "assigned a right value ";
             }
         }
-        else {
+
+    }
+    return tokenlist;
+}
+void treeinator(std::vector<token>  tokenlist){
+    std::string rightnumber = "";
+    for (int i = tokenlist.size() - 1; i >= 0; i--  ){
+        std::string spaces = "";
+        //loops through all the items in the token list building a tree
+        for (int l = i; l >= 0; l--  ) {
+            spaces.append("_");
+        }
+        if (tokenlist[i].LEFT != 123456) {
+
+            std::cout << ("\n/" + spaces);
+
+            if (tokenlist[i].VALUE != "VALUE") {
+                std::cout << tokenlist[i].VALUE;
+                std::cout << (rightnumber);
+                if (rightnumber != "") {
+                    rightnumber = "";
+                }
+            } else if (tokenlist[i].OPERATOR != "OPERATOR") {
+                std::cout << tokenlist[i].OPERATOR;
+                std::cout << (rightnumber);
+                if (rightnumber != "") {
+                    rightnumber = "";
+                }
+                if (tokenlist[i].RIGHT != 123456) {
+                    rightnumber.append("/\\" + tokenlist[tokenlist[i].RIGHT].VALUE );
+                }
+            }
 
         }
+    }
 
-        return tokenlist;
-    }
+
 }
-std::vector<token> treeinator(std::vector<token>  tokenlist){
-        return tokenlist;
-    }
 
 
 
@@ -175,26 +215,32 @@ std::string lexer() { // This is the first step where we get the input from the 
     std::ifstream myfile ("MainDungeon.dandd");
     std::string codeinput = "";
     std::string finalstring ="";
-    int countingthelines = 0;
+    std::string lastcodeinput ="";
     if ( myfile.is_open() ) { // always check whether the file is open
         while ( myfile ) { // loops until the end of the line
             std::getline(myfile, codeinput); // Grabs a full line of the file
             if (codeinput == "_^"){
                 // Ignore the comment
             }
+            if (codeinput == lastcodeinput) {
+                //Ignore if the last line is the same as this line
+            }
             else  { // Sends the line to tokenizer to be tokenized and save the result in the list called tokens
+                lastcodeinput = codeinput;
                 finalstring.append(codeinput + " ");
+
             }
         }
 
     }
+    //std::cout <<"\n" + finalstring + "\n";
     return finalstring;
 }
 
 
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
+    //std::cout << tokenlist.size();
     treeinator(parser(tokenlist));
-    std::cout << tokenlist[0].IDENTIFIER;
     return 0;
 }
