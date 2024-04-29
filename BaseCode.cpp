@@ -154,22 +154,29 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 
 std::vector<token> parser(std::vector<token>  tokenlist) {
     int lastoperator = 0;
+    bool notfoundfirstvalue = true;
 
     for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (i == 0){
+        if (notfoundfirstvalue && tokenlist[i].VALUE != "VALUE" ){
             tokenlist[i].LEFT = 0;
-            std::cout << "assigned a left value ";
-        }
-        if (tokenlist[i].OPERATOR != "OPERATOR"){
+            notfoundfirstvalue = false;
+            //std::cout << "assigned a left value ";
+        } else if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
             tokenlist[i].LEFT = (lastoperator);
             lastoperator = i;
-            std::cout << "assigned a left value ";
-            if  (tokenlist[i+1].VALUE != "VALUE") {
+            if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
+                tokenlist[i].RIGHT = tokenlist.size() - 1;
+            }
+
+        } else if (tokenlist[i].OPERATOR != "OPERATOR") {
+            tokenlist[i].LEFT = (lastoperator);
+            lastoperator = i;
+            //std::cout << "assigned a left value ";
+            if (tokenlist[i + 1].VALUE != "VALUE") {
                 tokenlist[i].RIGHT = i + 1;
-                std::cout << "assigned a right value ";
+                //std::cout << "assigned a right value ";
             }
         }
-
     }
     return tokenlist;
 }
@@ -181,28 +188,36 @@ void treeinator(std::vector<token>  tokenlist){
         for (int l = i; l >= 0; l--  ) {
             spaces.append("_");
         }
-        if (tokenlist[i].LEFT != 123456) {
 
-            std::cout << ("\n/" + spaces);
+         if (tokenlist[i].LEFT != 123456) {
 
-            if (tokenlist[i].VALUE != "VALUE") {
-                std::cout << tokenlist[i].VALUE;
-                std::cout << (rightnumber);
-                if (rightnumber != "") {
-                    rightnumber = "";
-                }
-            } else if (tokenlist[i].OPERATOR != "OPERATOR") {
-                std::cout << tokenlist[i].OPERATOR;
-                std::cout << (rightnumber);
-                if (rightnumber != "") {
-                    rightnumber = "";
-                }
-                if (tokenlist[i].RIGHT != 123456) {
-                    rightnumber.append("/\\" + tokenlist[tokenlist[i].RIGHT].VALUE );
-                }
+             std::cout << ("\n/" + spaces);
+             if (tokenlist[i].VALUE != "VALUE") {
+                 std::cout << tokenlist[i].VALUE;
+                 std::cout << (rightnumber);
+                 if (rightnumber != "") {
+                     rightnumber = "";
+                 }
+             } else if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
+                 std::cout << tokenlist[i].IDENTIFIER;
+                 std::cout << (rightnumber);
+                 if (rightnumber != "") {
+                     rightnumber = "";
+                 }
+                 if (tokenlist[i].RIGHT != 123456) {
+                     std::cout << "/\\" + tokenlist[tokenlist[i].RIGHT].EOC;
+                 }
+             } else if (tokenlist[i].OPERATOR != "OPERATOR") {
+                 std::cout << tokenlist[i].OPERATOR;
+                 std::cout << (rightnumber);
+                 if (rightnumber != "") {
+                     rightnumber = "";
+                 }
+                 if (tokenlist[i].RIGHT != 123456) {
+                     rightnumber.append("/\\" + tokenlist[tokenlist[i].RIGHT].VALUE);
+                 }
             }
-
-        }
+         }
     }
 
 
@@ -242,5 +257,6 @@ int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
     treeinator(parser(tokenlist));
+    tokenlist = parser(tokenlist);
     return 0;
 }
