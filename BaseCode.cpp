@@ -37,7 +37,6 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
     while  (code.length() > 0) {
         tokenpiece = until_char(code, ' ');
         int remove = tokenpiece.length() + 1;
-
         if (remove == 0) {
             remove = 1;
         }
@@ -154,27 +153,32 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 
 std::vector<token> parser(std::vector<token>  tokenlist) {
     int lastoperator = 0;
-    bool notfoundfirstvalue = true;
+    bool firstvalue = 0;
 
     for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (notfoundfirstvalue && tokenlist[i].VALUE != "VALUE" ){
-            tokenlist[i].LEFT = 0;
-            notfoundfirstvalue = false;
+        if (firstvalue == 0 && tokenlist[i].VALUE != "VALUE" ){
+            tokenlist[i].LEFT = i;
+            firstvalue = i;
             //std::cout << "assigned a left value ";
-        } else if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
-            tokenlist[i].LEFT = (lastoperator);
-            lastoperator = i;
-            if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
-                tokenlist[i].RIGHT = tokenlist.size() - 1;
-            }
 
         } else if (tokenlist[i].OPERATOR != "OPERATOR") {
+            if (lastoperator == 0){
+                lastoperator = firstvalue;
+            }
             tokenlist[i].LEFT = (lastoperator);
             lastoperator = i;
             //std::cout << "assigned a left value ";
             if (tokenlist[i + 1].VALUE != "VALUE") {
                 tokenlist[i].RIGHT = i + 1;
                 //std::cout << "assigned a right value ";
+            }
+        }
+        for (int i = 0; i < tokenlist.size(); i++ ) { //loops
+            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
+                tokenlist[i].LEFT = lastoperator;
+                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
+                    tokenlist[i].RIGHT = tokenlist.size() - 1;
+                }
             }
         }
     }
@@ -256,19 +260,48 @@ std::string lexer() { // This is the first step where we get the input from the 
     //std::cout <<"\n" + finalstring + "\n";
     return finalstring;
 }
+void printidentifier(token  giventoken) {
+    if (giventoken.VALUE != "VALUE"){
+        std::cout << giventoken.VALUE;
+    }
 
+}
+int domath(token operate, token left, token right){
+    int returnnumber;
 
-void interpreter(token  giventoken) { //Actually executes the code
+    int leftnumber =stoi(left.VALUE);
+    int rightnumber =stoi(right.VALUE);
+    if (operate.OPERATOR == "PLUS") {
+        returnnumber =  (leftnumber +  rightnumber);
+    }
+    if (operate.OPERATOR == "DIVIDE") {
+        returnnumber =  (leftnumber / rightnumber);
+    }
+    if (operate.OPERATOR == "MULTIPLY") {
+        returnnumber =  (leftnumber *  rightnumber);
+    }
+    if (operate.OPERATOR == "MINUS") {
+        returnnumber =  (leftnumber -  rightnumber);
+    }
+    return returnnumber;
+}
+
+void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
     std::string rightnumber = "";
-    for (int i = tokenlist.size() - 1; i >= 0; i-- ){
+    for (int i = 0; i < tokenlist.size(); i++ ){
+        std::string spaces = "";
+        if (tokenlist[i].LEFT != 123456) {
+            if (tokenlist[i].OPERATOR != "OPERATOR"){
+                tokenlist[i].VALUE = std::to_string(domath(tokenlist[i], tokenlist[tokenlist[i].LEFT], tokenlist[tokenlist[i].RIGHT]));
+            }
+        }
+    }
+    for (int i = 0; i < tokenlist.size(); i++ ){
         std::string spaces = "";
         if (tokenlist[i].LEFT != 123456) {
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
                 if (tokenlist[i].IDENTIFIER == "PRINT") {
-
-
-                }
-                if (tokenlist[i].RIGHT != 123456) {
+                    printidentifier(tokenlist[tokenlist[i].LEFT]);
                 }
             }
         }
@@ -280,7 +313,7 @@ void interpreter(token  giventoken) { //Actually executes the code
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
-    treeinator(parser(tokenlist));
+    //treeinator(parser(tokenlist));
     tokenlist = parser(tokenlist);
     interpreter(tokenlist);
     return 0;
