@@ -35,14 +35,22 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
     std::vector<token> tokenlist;
     std::string tokenpiece = "starting the loop";
     while  (code.length() > 0) {
+        //std::cout <<code;
+        //std::cout << "/\\";
+        if (code[0] == '*') {
+        code.erase(0,1);
+        tokenpiece = until_char(code, '*');
+        token returntoken;
+        returntoken.VALUE = tokenpiece;
+        tokenlist.push_back(returntoken);
+        } else {
         tokenpiece = until_char(code, ' ');
         int remove = tokenpiece.length() + 1;
         if (remove == 0) {
             remove = 1;
         }
         code = code.erase(0, remove);
-        //std::cout <<code;
-        //std::cout << "/\\";
+        }
         if (tokenpiece == "roll") { //tokenizes word for object or function
             token returntoken;
             returntoken.IDENTIFIER = "MAIN";
@@ -74,11 +82,14 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             token returntoken;
             returntoken.IDENTIFIER = "PRINT";
             tokenlist.push_back(returntoken);
+<<<<<<< Updated upstream
         } else if (tokenpiece[0] == '*') {//tokenizes symbol as quotation makes
             tokenpiece = tokenpiece.erase(0,1);
             token returntoken;
             returntoken.VALUE = until_char(tokenpiece, '*' );//ends the statment
             tokenlist.push_back(returntoken);
+=======
+>>>>>>> Stashed changes
         } else if (isdigit(tokenpiece[0])) {
             token returntoken;
             returntoken.VALUE = tokenpiece;
@@ -151,7 +162,10 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 
 // This is the second to last step where we turn the tokens in order
 
-std::vector<token> parser(std::vector<token>  tokenlist) {
+
+
+
+std::vector<token> parsering(std::vector<token>  tokenlist) {
     int lastoperator = 0;
     bool firstvalue = 0;
 
@@ -183,15 +197,27 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
 >>>>>>> Stashed changes
                 tokenlist[i].LEFT = lastoperator;
+<<<<<<< Updated upstream
                 if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {//places the question mark(end) at the right most of the tree
+=======
+                if (tokenlist[tokenlist.size() - 1].EOC != "END") {
+                    std::cout << "Error: no question mark to end the statement!"
+                }
+                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
+>>>>>>> Stashed changes
                     tokenlist[i].RIGHT = tokenlist.size() - 1;
+
                 }
             }
         }
     }
     return tokenlist;
 }
+<<<<<<< Updated upstream
 //puts the already parsed items into a very pretty tree that prints
+=======
+
+>>>>>>> Stashed changes
 void treeinator(std::vector<token>  tokenlist) {
     std::string rightnumber = "";
     for (int i = tokenlist.size() - 1; i >= 0; i-- ){
@@ -321,8 +347,8 @@ void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
 int main() {//executes the functions
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
-    treeinator(parser(tokenlist));
     tokenlist = parser(tokenlist);
+    treeinator(tokenlist);
     interpreter(tokenlist);
     return 0;
 }
