@@ -12,7 +12,7 @@ public:             // Access specifier
     std::string IDENTIFIER = "IDENTIFIER"; //Main type of statment the token is (example Roll is identifier and so is nat)
     std::string OPERATOR = "OPERATOR";
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
-    std::string EQUALS = "EQUALS";
+    std::string VARIABLE = "VARIABLE";
     std::string VALUE = "VALUE";  // Information the user inputs
     int RIGHT = 123456;
     int LEFT = 123456;
@@ -59,16 +59,16 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             tokenlist.push_back(returntoken);
         } else if (tokenpiece == "kobold") {
             token returntoken;
-            returntoken.OPERATOR = "INTEGER";
+            returntoken.VARIABLE = "INTEGER";
             tokenlist.push_back(returntoken);
         }
         else if (tokenpiece == "dragon") {
             token returntoken;
-            returntoken.OPERATOR = "STRING";
+            returntoken.VARIABLE = "STRING";
             tokenlist.push_back(returntoken);
         } else if (tokenpiece == "goblin") {
                 token returntoken;
-                returntoken.OPERATOR = "BOOLEAN";
+                returntoken.VARIABLE = "BOOLEAN";
                 tokenlist.push_back(returntoken);
         } else if (tokenpiece == "say") {
             token returntoken;
@@ -175,6 +175,9 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
         }
         for (int i = 0; i < tokenlist.size(); i++ ) { //loops
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
+                if (lastoperator == 0){
+                    lastoperator = firstvalue;
+                }
                 tokenlist[i].LEFT = lastoperator;
                 if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
                     tokenlist[i].RIGHT = tokenlist.size() - 1;
@@ -313,7 +316,7 @@ void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
-    //treeinator(parser(tokenlist));
+    treeinator(parser(tokenlist));
     tokenlist = parser(tokenlist);
     interpreter(tokenlist);
     return 0;
