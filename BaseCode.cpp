@@ -180,32 +180,37 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
     }
     return tokenlist;
 }
-void treeinator(std::vector<token>  tokenlist){
+void treeinator(std::vector<token>  tokenlist) {
     std::string rightnumber = "";
-    for (int i = tokenlist.size() - 1; i >= 0; i--  ){
+    for (int i = tokenlist.size() - 1; i >= 0; i-- ){
+        std::string spaces = "";
+        //loops through all the items in the token list building a tree
+        for (int l = 0; l < tokenlist.size(); l++  ) {
+            spaces.append("_");
+        }
+        if (tokenlist[i].LEFT != 123456) {
+            if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
+                std::cout << ("\n/" + spaces);
+                std::cout << tokenlist[i].IDENTIFIER;
+                if (tokenlist[i].RIGHT != 123456) {
+                    rightnumber.append("/\\" + tokenlist[tokenlist[i].RIGHT].EOC);
+                }
+            }
+            }
+        }
+    for (int i = tokenlist.size() - 1; i >= 0; i-- ){
         std::string spaces = "";
         //loops through all the items in the token list building a tree
         for (int l = i; l >= 0; l--  ) {
             spaces.append("_");
         }
-
          if (tokenlist[i].LEFT != 123456) {
-
              std::cout << ("\n/" + spaces);
              if (tokenlist[i].VALUE != "VALUE") {
                  std::cout << tokenlist[i].VALUE;
                  std::cout << (rightnumber);
                  if (rightnumber != "") {
                      rightnumber = "";
-                 }
-             } else if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
-                 std::cout << tokenlist[i].IDENTIFIER;
-                 std::cout << (rightnumber);
-                 if (rightnumber != "") {
-                     rightnumber = "";
-                 }
-                 if (tokenlist[i].RIGHT != 123456) {
-                     std::cout << "/\\" + tokenlist[tokenlist[i].RIGHT].EOC;
                  }
              } else if (tokenlist[i].OPERATOR != "OPERATOR") {
                  std::cout << tokenlist[i].OPERATOR;
@@ -253,10 +258,30 @@ std::string lexer() { // This is the first step where we get the input from the 
 }
 
 
+void interpreter(token  giventoken) { //Actually executes the code
+    std::string rightnumber = "";
+    for (int i = tokenlist.size() - 1; i >= 0; i-- ){
+        std::string spaces = "";
+        if (tokenlist[i].LEFT != 123456) {
+            if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
+                if (tokenlist[i].IDENTIFIER == "PRINT") {
+
+
+                }
+                if (tokenlist[i].RIGHT != 123456) {
+                }
+            }
+        }
+    }
+
+}
+
+
 int main() {
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
     treeinator(parser(tokenlist));
     tokenlist = parser(tokenlist);
+    interpreter(tokenlist);
     return 0;
 }
