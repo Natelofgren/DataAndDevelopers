@@ -2,6 +2,8 @@
 
 #### A Programming Language by Nathaniel Lofgren, Tala Garibay, and Isaac Stiles    
 
+![Data and Developers Logo](/img/Data%20&%20Developers.jpg)
+
 ### Overview  
 
 Data and Developers is a programming language based on Dungeons and Dragons. It is a statically-typed interpreted language built on C++. Data and Developers files have a file extension of .dandd.  
