@@ -82,14 +82,11 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             token returntoken;
             returntoken.IDENTIFIER = "PRINT";
             tokenlist.push_back(returntoken);
-<<<<<<< Updated upstream
         } else if (tokenpiece[0] == '*') {//tokenizes symbol as quotation makes
             tokenpiece = tokenpiece.erase(0,1);
             token returntoken;
             returntoken.VALUE = until_char(tokenpiece, '*' );//ends the statment
             tokenlist.push_back(returntoken);
-=======
->>>>>>> Stashed changes
         } else if (isdigit(tokenpiece[0])) {
             token returntoken;
             returntoken.VALUE = tokenpiece;
@@ -165,18 +162,17 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 
 
 
-std::vector<token> parsering(std::vector<token>  tokenlist) {
+std::vector<token> parser(std::vector<token>  tokenlist) {
     int lastoperator = 0;
     bool firstvalue = 0;
-
-    for (int i = 0; i < tokenlist.size(); i++ ){ //loops through all the items in the token list
-        if (firstvalue == 0 && tokenlist[i].VALUE != "VALUE" ){//places values into a tree
+    for (int i = 0; i < tokenlist.size(); i++) { //loops through all the items in the token list
+        if (firstvalue == 0 && tokenlist[i].VALUE != "VALUE") {//places values into a tree
             tokenlist[i].LEFT = i;
             firstvalue = i;
             //std::cout << "assigned a left value ";
 
         } else if (tokenlist[i].OPERATOR != "OPERATOR") {//places operators into tree
-            if (lastoperator == 0){//places operator first in the tree if there is no other operators
+            if (lastoperator == 0) {//places operator first in the tree if there is no other operators
                 lastoperator = firstvalue;
             }
             tokenlist[i].LEFT = (lastoperator);
@@ -187,37 +183,28 @@ std::vector<token> parsering(std::vector<token>  tokenlist) {
                 //std::cout << "assigned a right value ";
             }
         }
-        for (int i = 0; i < tokenlist.size(); i++ ) { //loops
-<<<<<<< Updated upstream
-            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {
-                if (lastoperator == 0){
+        for (int i = 0; i < tokenlist.size(); i++) { //loops
+            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
+                if (lastoperator == 0) {//places operator first in the tree if there is no other operators
                     lastoperator = firstvalue;
                 }
-=======
-            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
->>>>>>> Stashed changes
                 tokenlist[i].LEFT = lastoperator;
-<<<<<<< Updated upstream
-                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {//places the question mark(end) at the right most of the tree
-=======
-                if (tokenlist[tokenlist.size() - 1].EOC != "END") {
-                    std::cout << "Error: no question mark to end the statement!"
-                }
-                if (tokenlist[tokenlist.size() - 1].EOC != "EOC") {
->>>>>>> Stashed changes
-                    tokenlist[i].RIGHT = tokenlist.size() - 1;
 
+                if (tokenlist[tokenlist.size() - 1].EOC != "ENDOFCOMMAND") {//places the question mark(end) at the right most of the tree
+                    tokenlist[i].RIGHT = (tokenlist.size() - 1);
+
+                    if (tokenlist[tokenlist.size() - 1].EOC != "END") {
+                           std::cout << "Error: no question mark to end the statement!";
+                    }
                 }
             }
+
         }
     }
     return tokenlist;
 }
-<<<<<<< Updated upstream
 //puts the already parsed items into a very pretty tree that prints
-=======
 
->>>>>>> Stashed changes
 void treeinator(std::vector<token>  tokenlist) {
     std::string rightnumber = "";
     for (int i = tokenlist.size() - 1; i >= 0; i-- ){
@@ -294,9 +281,11 @@ std::string lexer() { // This is the first step where we get the input from the 
     //std::cout <<"\n" + finalstring + "\n";
     return finalstring;
 }
-void printidentifier(token  giventoken) {
+void printidentifier(token giventoken) {
     if (giventoken.VALUE != "VALUE"){
         std::cout << giventoken.VALUE;
+    } else {
+        std::cout << "\n   Compliler Error";
     }
 
 }
@@ -321,9 +310,7 @@ int domath(token operate, token left, token right){//Takes the numbers orantatio
 }
 
 void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
-    std::string rightnumber = "";
     for (int i = 0; i < tokenlist.size(); i++ ){
-        std::string spaces = "";
         if (tokenlist[i].LEFT != 123456) {
             if (tokenlist[i].OPERATOR != "OPERATOR"){
                 tokenlist[i].VALUE = std::to_string(domath(tokenlist[i], tokenlist[tokenlist[i].LEFT], tokenlist[tokenlist[i].RIGHT]));
@@ -344,11 +331,23 @@ void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
 }
 
 
+
+
+
 int main() {//executes the functions
     std::vector<token> tokenlist = tokenizer(lexer());
     //std::cout << tokenlist.size();
-    tokenlist = parser(tokenlist);
-    treeinator(tokenlist);
-    interpreter(tokenlist);
+    int startingpoint = 0;
+    for (int i = 0; i < tokenlist.size(); i++ ) { //loops through all the items in the token list
+        if (tokenlist[i].EOC != "ENDOFCOMMAND") {
+            std::vector<token> line(tokenlist.begin() + startingpoint,
+                                    tokenlist.begin() + i + 1);
+            startingpoint = i;
+            line = parser(line);
+            //treeinator(line);
+            interpreter(line);
+        }
+    }
+
     return 0;
 }
