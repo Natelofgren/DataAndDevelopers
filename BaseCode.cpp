@@ -183,23 +183,26 @@ std::vector<token> parser(std::vector<token>  tokenlist) {
                 //std::cout << "assigned a right value ";
             }
         }
-        for (int i = 0; i < tokenlist.size(); i++) { //loops
-            if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
-                if (lastoperator == 0) {//places operator first in the tree if there is no other operators
-                    lastoperator = firstvalue;
-                }
-                tokenlist[i].LEFT = lastoperator;
 
-                if (tokenlist[tokenlist.size() - 1].EOC != "ENDOFCOMMAND") {//places the question mark(end) at the right most of the tree
-                    tokenlist[i].RIGHT = (tokenlist.size() - 1);
-
-                    if (tokenlist[tokenlist.size() - 1].EOC != "END") {
-                           std::cout << "Error: no question mark to end the statement!";
-                    }
-                }
+    }
+    for (int i = 0; i < tokenlist.size(); i++) { //loops
+        if (tokenlist[i].IDENTIFIER != "IDENTIFIER") {//places the identifer into tree
+            if (lastoperator == 0) {//places operator first in the tree if there is no other operators
+                lastoperator = firstvalue;
             }
+            tokenlist[i].LEFT = lastoperator;
+            //std::cout << "\n this is the value assigned:";
+            //std::cout << lastoperator;
+            for (int h = 0; h < tokenlist.size(); h++) {
+                if (tokenlist[h].EOC != "ENDOFCOMMAND") {//places the question mark(end) at the right most of the tree
+                    tokenlist[i].RIGHT = (h);
+                }
 
+            } if (tokenlist[i].RIGHT == 123456) {
+                std::cout << "No end of command!";
+            }
         }
+
     }
     return tokenlist;
 }
@@ -285,7 +288,7 @@ void printidentifier(token giventoken) {
     if (giventoken.VALUE != "VALUE"){
         std::cout << giventoken.VALUE;
     } else {
-        std::cout << "\n   Compliler Error";
+        std::cout << "\n   Compiler Error";
     }
 
 }
@@ -318,7 +321,6 @@ void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
         }
     }
     for (int i = 0; i < tokenlist.size(); i++ ){
-        std::string spaces = "";
         if (tokenlist[i].LEFT != 123456) {
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
                 if (tokenlist[i].IDENTIFIER == "PRINT") {
@@ -342,7 +344,7 @@ int main() {//executes the functions
         if (tokenlist[i].EOC != "ENDOFCOMMAND") {
             std::vector<token> line(tokenlist.begin() + startingpoint,
                                     tokenlist.begin() + i + 1);
-            startingpoint = i;
+            startingpoint = i + 1;
             line = parser(line);
             //treeinator(line);
             interpreter(line);
