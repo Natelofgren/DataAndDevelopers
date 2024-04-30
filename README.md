@@ -4,7 +4,7 @@
 
 ### Overview  
 
-Data and Developers is a programming language based on Dungeons and Dragons. It is built on C++. Data and Developers files have a file extension of .dandd.  
+Data and Developers is a programming language based on Dungeons and Dragons. It is a statically-typed interpreted language built on C++. Data and Developers files have a file extension of .dandd.  
 
 ### Demo Code
 
@@ -27,7 +27,7 @@ roll initiative <>
         railroad //  
             say *no woo* ?
         \\  
-        reroll i – 1 ?  
+        reroll kobold i – 1 ?  
     ><
 
     nat j kobold 5 ?  
@@ -38,7 +38,7 @@ roll initiative <>
         railroad //  
             say *beeg* ?  
         \\  
-        reroll j – 1 ?  
+        reroll kobold j – 1 ?  
     ><  
 ><  
 ```
@@ -54,19 +54,19 @@ beeg
 smol  
 smol  
 
-### Syntax
-| Keyword    | Description                      |
-|------------|----------------------------------|
-| roll       | Define an object or function     |
-| initiative | main function                    |
-| reroll     | Declare or manipulate a variable |
-| nat        | Declare a new variable           |
-| quest      | If statement                     |
-| sidequest  | Else If statement                |
-| railroad   | Else statement                   |
-| dungeon    | Define loop                      |
-| floors     | Number of times to run loop      |
-| say        | Print to screen                  |
+### Reserved Words
+| Keyword    | Description                  |
+|------------|------------------------------|
+| roll       | Define an object or function |
+| initiative | main function                |
+| nat        | Declare a new variable       |
+| reroll     | Manipulate a variable        |
+| quest      | If statement                 |
+| sidequest  | Else If statement            |
+| railroad   | Else statement               |
+| dungeon    | Define loop                  |
+| floors     | Number of times to run loop  |
+| say        | Print to screen              |
 
 
 ### Syntax Rules  
@@ -76,7 +76,7 @@ smol
 - Multi-line comments begin and end with `||`.
 - Blocks of code in a `quest` statement begin with `//` and end with `\\`. All other blocks of code begin with `<>` and end with `><`.  
 - Strings begin and end with the `*` character.  
-- All lines involving the creation or manipulation of variables begin with the keyword `reroll`. The keyword `nat` is used to define a new variable.
+- All lines involving the manipulation of variables begin with the keyword `reroll`. A variable's type must always be passed into the `reroll` statement.  
 - If a `dungeon` statement is passed a number in its header, it will loop a fixed number of times. If it is passed a variable with a numeric value, it will loop until the variable's value is as specified in the header.
 
 ### Binary Operators
@@ -102,10 +102,16 @@ smol
 
 ### How to Run
 
+- Download BaseCode.cpp from the repository
+- Name the file with the DandD program MainDungeon.dandd 
+- Save MainDungeon.dandd to the same folder as BaseCode.cpp
+- Run BaseCode.cpp in a C++ environment (such as JetBrains CLion)
+
 ### Valid Grammars
 
-`reroll nat [varName] [varType] [value] ?`  
-`reroll [varName] [mathOperator] [number] ?`  
+`nat [varType] [varName] [value] ?`  
+`reroll kobold [varName] [mathOperator] [number] ?`  
+`reroll kobold [varName] [number] ?`  
 `say *[stringValue]* ?`  
 `say [varName] ?`  
 `say [number] ?`  
@@ -115,3 +121,4 @@ smol
 `|| [comment text] ||`
 
 ### Language State
+- Two lines can't say the same thing b/c the last line was repeating so this was the fix
