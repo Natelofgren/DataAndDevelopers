@@ -4,7 +4,7 @@
 
 ### Overview  
 
-Data and Developers is a programming language based on Dungeons and Dragons. It is built on C++. Data and Developers files have a file extension of .dandd.  
+Data and Developers is a programming language based on Dungeons and Dragons. It is a statically-typed interpreted language built on C++. Data and Developers files have a file extension of .dandd.  
 
 ### Demo Code
 
@@ -101,6 +101,8 @@ smol
 | dragon              | string            |  
 
 ### How to Run
+
+Write a dandd file in the same folder where the C++ code is, name the file MainDungeon.dandd, run the C++ code 
 
 ### Valid Grammars
 
