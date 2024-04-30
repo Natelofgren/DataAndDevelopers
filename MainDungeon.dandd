@@ -1,6 +1,9 @@
 nat kobold Bob 1361 ?
-reroll Bob & 21 ?
-say Bob ?
-say *  * ?
-reroll Bob & 22 ?
-say Bob ?
+nat dragon x *I am a dragon* ?
+nat goblin ok mimic ?
+say Bob ? say * * ? say x ? say * * ? say ok ? say * * ?
+say 13 · 10 ÷ 5 – 10 & 20 ?
+reroll Bob & 639 ?
+say * * ? say Bob ?
+
+

@@ -143,7 +143,15 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             remove = 1;
         }
         code = code.erase(0, remove);
-        returntoken2.VALUE = tokenpiece;
+        if (tokenpiece == "chest") {//tokenizes the word for boolean value - True
+            token returntoken;
+            returntoken2.VALUE = "TRUE";
+        } else if (tokenpiece == "mimic") {//tokenizes the the word for the boolean value - False
+            token returntoken;
+            returntoken2.VALUE = "FALSE";
+        } else {
+            std::cout << "Error! Boolean should be 'chest' or 'mimic'";
+        }
         tokenlist.push_back(returntoken2);
         variables.push_back(returntoken2);
 
@@ -160,14 +168,6 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
         } else if (isdigit(tokenpiece[0])) {
             token returntoken;
             returntoken.VALUE = tokenpiece;
-            tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "chest") {//tokenizes the word for boolean value - True
-            token returntoken;
-            returntoken.VALUE = "TRUE";
-            tokenlist.push_back(returntoken);
-        } else if (tokenpiece == "mimic") {//tokenizes the the word for the boolean value - False
-            token returntoken;
-            returntoken.VALUE = "FALSE";
             tokenlist.push_back(returntoken);
         } else if (tokenpiece == "?") {//tokenizes the symbol to end a statement
             token returntoken;
