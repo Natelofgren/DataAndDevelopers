@@ -109,16 +109,22 @@ smol
 
 ### Valid Grammars
 
-`nat [varType] [varName] [value] ?`  
-`reroll kobold [varName] [mathOperator] [number] ?`  
-`reroll kobold [varName] [number] ?`  
-`say *[stringValue]* ?`  
-`say [varName] ?`  
-`say [number] ?`  
-`dungeon [number] floors <>`  
-`dungeon [numericalVarName] floors <>`  
-`_^ [comment text]`  
-`|| [comment text] ||`
+1. `nat [varType] [varName] [value] ?`  
+2. `reroll [varType] [varName] [mathOperator] [number] ?`  
+3. `reroll [varType] [varName] [number] ?`  
+4. `say *[stringValue]* ?`  
+5. `say [varName] ?`  
+6. `say [number] ?`  
+7. `dungeon [number] floors <>`  
+8. `dungeon [numericalVarName] floors <>`  
+9. `_^ [comment text]`  
+10. `|| [comment text] ||`
 
 ### Language State
-- Two lines can't say the same thing b/c the last line was repeating so this was the fix
+- Only Print, basic Operations, and Variable Declaration currently work
+- Creates a tree based off of the token structure
+- Current valid grammer statements are 2 - 6 and 9
+- Throws some errors if grammer is off, like if variable type is not valid
+- Two lines can't say the same thing in a row b/c the last line was repeating so this was the fix
+- Variables only recognize the last operation made to them and don't store that information
+- Recognizes any amount of binary operations and does them from left to right 
