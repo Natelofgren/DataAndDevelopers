@@ -1,3 +1,6 @@
-say 3 & 3 ?
-say * never thought we would make it,* ?
-say * but we did* ?
+nat kobold Bob 1361 ?
+reroll Bob & 21 ?
+say Bob ?
+say *  * ?
+reroll Bob & 22 ?
+say Bob ?

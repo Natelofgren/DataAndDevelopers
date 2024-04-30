@@ -12,11 +12,14 @@ public:             // Access specifier
     std::string IDENTIFIER = "IDENTIFIER"; //Main type of statment the token is (example Roll is identifier and so is nat)
     std::string OPERATOR = "OPERATOR";
     std::string EOC = "ENDOFCOMMAND"; //The last part of the line
-    std::string VARIABLE = "VARIABLE";
+    std::string VARIABLE = "VARIABLE"; // Used for variables
+    std::string TYPE = "TYPE";  // Used for starting variables
     std::string VALUE = "VALUE";  // Information the user inputs
     int RIGHT = 123456;
     int LEFT = 123456;
 };
+std::vector<token> variables;
+
 // the function below takes a string and sends back the string until the first space
 std::string until_char(std::string const& s, char thing)
 {
@@ -30,6 +33,7 @@ std::string until_char(std::string const& s, char thing)
         return s;
     }
 }
+
 
 std::vector<token> tokenizer(std::string code){   //This is where everything is converted to tokens
     std::vector<token> tokenlist;
@@ -63,21 +67,87 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
 
         } else if (tokenpiece == "nat") {//tokenizes the word for the start of a variable
             token returntoken;
-            returntoken.IDENTIFIER = "VARIABLE";
+            returntoken.IDENTIFIER = "DECLARE";
+            tokenlist.push_back(returntoken);
+        } else if (tokenpiece == "reroll") {//tokenizes the word for assigning a new value to a variable
+            token returntoken;
+            returntoken.IDENTIFIER = "REDECLARE";
             tokenlist.push_back(returntoken);
         } else if (tokenpiece == "kobold") {
             token returntoken;
-            returntoken.VARIABLE = "INTEGER";
+            returntoken.TYPE = "INTEGER";
             tokenlist.push_back(returntoken);
+
+            token returntoken2;
+            tokenpiece = until_char(code, ' ');
+            int remove = tokenpiece.length() + 1;
+            if (remove == 0) {
+                remove = 1;
+            }
+            code = code.erase(0, remove);
+            returntoken2.VARIABLE = tokenpiece;
+            tokenpiece = until_char(code, ' ');
+            remove = tokenpiece.length() + 1;
+            if (remove == 0) {
+                remove = 1;
+            }
+            code = code.erase(0, remove);
+            returntoken2.VALUE = tokenpiece;
+            tokenlist.push_back(returntoken2);
+            variables.push_back(returntoken2);
+
         }
         else if (tokenpiece == "dragon") {//tokenizes the word that defines a string
+
             token returntoken;
-            returntoken.VARIABLE = "STRING";
+            returntoken.TYPE = "STRING";
             tokenlist.push_back(returntoken);
+
+            token returntoken2;
+            tokenpiece = until_char(code, ' ');
+            int remove = tokenpiece.length() + 1;
+            if (remove == 0) {
+                remove = 1;
+            }
+            code = code.erase(0, remove);
+            returntoken2.VARIABLE = tokenpiece;
+            code.erase(0,1);
+            tokenpiece = until_char(code, '*');
+            returntoken2.VALUE = tokenpiece;
+            remove = tokenpiece.length() + 1;
+            if (remove == 0) {
+                remove = 1;
+            }
+            code = code.erase(0, remove);
+            tokenlist.push_back(returntoken2);
+            variables.push_back(returntoken2);
+
+
         } else if (tokenpiece == "goblin") {//tokenizes the word that defines a boolean
-                token returntoken;
-                returntoken.VARIABLE = "BOOLEAN";
-                tokenlist.push_back(returntoken);
+
+        token returntoken;
+        returntoken.TYPE = "BOOLEAN";
+        tokenlist.push_back(returntoken);
+
+        token returntoken2;
+        tokenpiece = until_char(code, ' ');
+        int remove = tokenpiece.length() + 1;
+        if (remove == 0) {
+            remove = 1;
+        }
+        code = code.erase(0, remove);
+        returntoken2.VARIABLE = tokenpiece;
+        tokenpiece = until_char(code, ' ');
+        remove = tokenpiece.length() + 1;
+        if (remove == 0) {
+            remove = 1;
+        }
+        code = code.erase(0, remove);
+        returntoken2.VALUE = tokenpiece;
+        tokenlist.push_back(returntoken2);
+        variables.push_back(returntoken2);
+
+
         } else if (tokenpiece == "say") {//tokenizes the word that start the print function
             token returntoken;
             returntoken.IDENTIFIER = "PRINT";
@@ -152,6 +222,14 @@ std::vector<token> tokenizer(std::string code){   //This is where everything is 
             returntoken.IDENTIFIER = "ELSE";
             tokenlist.push_back(returntoken);
         } else {
+            for (int i = 0; i < variables.size(); i++){
+                if (variables[i].VARIABLE == tokenpiece) {//tokenize values
+                    token returntoken;
+                    returntoken.VARIABLE = tokenpiece;
+                    returntoken.VALUE = variables[i].VALUE;
+                    tokenlist.push_back(returntoken);
+                }
+            }
         }
     }
     return tokenlist;
@@ -256,9 +334,6 @@ void treeinator(std::vector<token>  tokenlist) {
 
 }
 
-
-
-
 std::string lexer() { // This is the first step where we get the input from the file
     std::ifstream myfile ("MainDungeon.dandd");
     std::string codeinput = "";
@@ -284,17 +359,9 @@ std::string lexer() { // This is the first step where we get the input from the 
     //std::cout <<"\n" + finalstring + "\n";
     return finalstring;
 }
-void printidentifier(token giventoken) {
-    if (giventoken.VALUE != "VALUE"){
-        std::cout << giventoken.VALUE;
-    } else {
-        std::cout << "\n   Compiler Error";
-    }
 
-}
 int domath(token operate, token left, token right){//Takes the numbers orantation to the operator in the tree and adds them together
     int returnnumber;
-
     int leftnumber =stoi(left.VALUE);
     int rightnumber =stoi(right.VALUE);
     if (operate.OPERATOR == "PLUS") {
@@ -311,18 +378,67 @@ int domath(token operate, token left, token right){//Takes the numbers orantatio
     }
     return returnnumber;
 }
+void createvariable(std::string value, std::string name, std::string type){
+    if (type == "STRING"){
+        token newtoken;
+        newtoken.VALUE = value;
+        newtoken.VARIABLE = name;
+        variables.push_back(newtoken);
+    } else if (type == "INTEGER"){
+        token newtoken;
+        newtoken.VALUE = value;
+        newtoken.VARIABLE = name;
+        variables.push_back(newtoken);
+    } else if (type == "BOOLEAN"){
+        token newtoken;
+        newtoken.VALUE = value;
+        newtoken.VARIABLE = name;
+        variables.push_back(newtoken);
+    } else {
+        std::cout << "Incorrect Name for Variable";
+    }
 
+}
+void editvariable(std::string value, std::string name){
+    for (int i = 0; i < variables.size(); i++) {
+        if (variables[i].VARIABLE == name){
+            variables[i].VALUE = value;
+        }
+    }
+}
+std::string getvariable(std::string name){
+    for (int i = 0; i < variables.size(); i++) {
+        if (variables[i].VARIABLE == name){
+            return variables[i].VALUE;
+        }
+    }
+}
+void printidentifier(token giventoken) {
+    if (giventoken.VARIABLE != "VARIABLE") {
+        std::cout << getvariable(giventoken.VARIABLE);
+    } else if (giventoken.VALUE != "VALUE"){
+        std::cout << giventoken.VALUE;
+    } else {
+        std::cout << "\n   Incorrect Print Value Error";
+    }
+
+}
 void interpreter(std::vector<token>  tokenlist) { //Actually executes the code
     for (int i = 0; i < tokenlist.size(); i++ ){
         if (tokenlist[i].LEFT != 123456) {
             if (tokenlist[i].OPERATOR != "OPERATOR"){
                 tokenlist[i].VALUE = std::to_string(domath(tokenlist[i], tokenlist[tokenlist[i].LEFT], tokenlist[tokenlist[i].RIGHT]));
             }
+
         }
+
     }
     for (int i = 0; i < tokenlist.size(); i++ ){
         if (tokenlist[i].LEFT != 123456) {
             if (tokenlist[i].IDENTIFIER != "IDENTIFIER"){
+                if (tokenlist[i].IDENTIFIER == "REDECLARE") {
+                    editvariable(tokenlist[tokenlist[i].LEFT].VALUE, tokenlist[i + 1].VARIABLE);
+                }
                 if (tokenlist[i].IDENTIFIER == "PRINT") {
                     printidentifier(tokenlist[tokenlist[i].LEFT]);
                 }
