@@ -125,8 +125,8 @@ smol
 ### Language State
 - Only Print, basic Operations, and Variable Declaration currently work
 - Creates a tree based off of the token structure
-- Current valid grammer statements are 1 - 6 and 9
+- Current valid grammar statements are 1 - 6 and 9
 - Throws some errors if grammar is off, like if variable type is not valid
-- Two lines can't say the same thing in a row b/c the last line was repeating so this was the fix
+- If two back-to-back lines are the same, only one will run
 - Variables only recognize the last operation made to them and don't store that information
 - Recognizes any amount of binary operations and does them from left to right 
